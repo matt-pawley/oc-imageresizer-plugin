@@ -1,0 +1,9 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    not_found_image:
+        label: Not Found Image
+        type: mediafinder
+        span: auto
