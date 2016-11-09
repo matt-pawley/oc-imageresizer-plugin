@@ -39,7 +39,7 @@ See list of options below
 ```
 
 Key | Description | Options | Default
-- | - | - | -
+--- | --- | --- | ---
 mode | How the image should be fitted to dimensions | auto | exact, portrait, landscape, auto, crop
 offset | Offset the resized image | [0,0] | [int, int]
 extension | The extension on the image to return | auto | jpg, jpeg, gif, png
