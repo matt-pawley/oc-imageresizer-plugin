@@ -9,7 +9,6 @@ use ToughDeveloper\ImageResizer\Classes\Image;
  */
 class Plugin extends PluginBase
 {
-
     /**
      * Returns information about this plugin.
      *
@@ -21,7 +20,8 @@ class Plugin extends PluginBase
             'name'        => 'Image Resizer',
             'description' => 'Provides Twig filter to resize images on the fly',
             'author'      => 'Tough Developer',
-            'icon'        => 'icon-picture-o'
+            'icon'        => 'icon-picture-o',
+            'homepage'    => 'https://github.com/toughdeveloper/oc-imageresizer-plugin'
         ];
     }
 
@@ -34,9 +34,9 @@ class Plugin extends PluginBase
     {
         return [
             'toughdeveloper.imageresizer.access_settings' => [
-                'tab'       => 'Image Resizer',
-                'label'     => 'Manage Settings'
-            ],
+                'tab'   => 'Image Resizer',
+                'label' => 'Manage Settings'
+            ]
         ];
     }
 
@@ -65,6 +65,4 @@ class Plugin extends PluginBase
             ]
         ];
     }
-
-
 }
