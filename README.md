@@ -38,7 +38,7 @@ See list of options below
 {{ propery.image | resize(500, false, { mode: 'crop', quality: '80', extension: 'png' }) }}
 ```
 
-Key | Description | Options | Default
+Key | Description | Default | Options
 --- | --- | --- | ---
 mode | How the image should be fitted to dimensions | auto | exact, portrait, landscape, auto, crop
 offset | Offset the resized image | [0,0] | [int, int]
