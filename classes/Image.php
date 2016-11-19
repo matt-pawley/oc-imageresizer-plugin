@@ -62,10 +62,10 @@ class Image {
      */
     protected function parseFileName($filePath) {
         return str_replace([
+            config('app.url'),
             'http://',
             'https://',
             'localhost',
-            config('app.url')
         ], '', $filePath);
     }
 

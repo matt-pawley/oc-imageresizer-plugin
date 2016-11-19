@@ -1,1 +1,2 @@
 1.0.1: First version of ImageResizer
+1.0.2: Fixes bug where url set in config/app.php affecting rendering of image.
