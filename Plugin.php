@@ -1,6 +1,5 @@
 <?php namespace ToughDeveloper\ImageResizer;
 
-use Backend;
 use System\Classes\PluginBase;
 use ToughDeveloper\ImageResizer\Classes\Image;
 
@@ -17,8 +16,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'Image Resizer',
-            'description' => 'Provides Twig filter to resize images on the fly',
+            'name'        => 'toughdeveloper.imageresizer::lang.plugin.name',
+            'description' => 'toughdeveloper.imageresizer::lang.plugin.description',
             'author'      => 'Tough Developer',
             'icon'        => 'icon-picture-o',
             'homepage'    => 'https://github.com/toughdeveloper/oc-imageresizer-plugin'
@@ -34,8 +33,8 @@ class Plugin extends PluginBase
     {
         return [
             'toughdeveloper.imageresizer.access_settings' => [
-                'tab'   => 'Image Resizer',
-                'label' => 'Manage Settings'
+                'tab'   => 'toughdeveloper.imageresizer::lang.permission.tab',
+                'label' => 'toughdeveloper.imageresizer::lang.permission.label'
             ]
         ];
     }
@@ -56,9 +55,9 @@ class Plugin extends PluginBase
     {
         return [
             'settings' => [
-                'label'       => 'Image Resizer Settings',
+                'label'       => 'toughdeveloper.imageresizer::lang.settings.label',
                 'icon'        => 'icon-picture-o',
-                'description' => 'Configure Image Resizer Settings',
+                'description' => 'toughdeveloper.imageresizer::lang.settings.description',
                 'class'       => 'ToughDeveloper\ImageResizer\Models\Settings',
                 'order'       => 0,
                 'permissions' => ['toughdeveloper.imageresizer.access_settings']

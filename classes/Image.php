@@ -1,20 +1,18 @@
-<?php
-namespace ToughDeveloper\ImageResizer\Classes;
+<?php namespace ToughDeveloper\ImageResizer\Classes;
 
 use ToughDeveloper\ImageResizer\Models\Settings;
 use October\Rain\Database\Attach\File;
 
-class Image {
-
+class Image
+{
     /**
      * File path of image
     */
     public $filePath;
 
-    public function __construct($filePath = false) {
-
-        if($filePath instanceof File)
-        {
+    public function __construct($filePath = false)
+    {
+        if ($filePath instanceof File) {
             $this->filePath = base_path() . $filePath->getPath();
             return;
         }
@@ -32,12 +30,14 @@ class Image {
      * @param array   $optinons The options
      * @return string
      */
-    public function resize($width = false, $height = false, $options = []) {
+    public function resize($width = false, $height = false, $options = [])
+    {
         $settings = Settings::instance();
 
         // Not a file? Display the not found image
-        if (!is_file($this->filePath))
+        if (!is_file($this->filePath)) {
             return $this->notFoundImage($width, $height);
+        }
 
         // Create a new file
         $file = new File;
@@ -60,7 +60,8 @@ class Image {
      *
      * @return string
      */
-    protected function parseFileName($filePath) {
+    protected function parseFileName($filePath)
+    {
         return str_replace([
             config('app.url'),
             'http://',
@@ -74,7 +75,8 @@ class Image {
      *
      * @return string
      */
-    protected function diskName() {
+    protected function diskName()
+    {
         return md5($this->filePath);
     }
 
@@ -83,7 +85,8 @@ class Image {
      *
      * @return string
      */
-    protected function notFoundImage($width, $height) {
+    protected function notFoundImage($width, $height)
+    {
         $settings = Settings::instance();
 
         // Have we got a custom not found image? If so, serve this.
