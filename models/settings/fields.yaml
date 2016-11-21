@@ -3,7 +3,8 @@
 # ===================================
 
 fields:
+
     not_found_image:
-        label: Not Found Image
+        label: toughdeveloper.imageresizer::lang.settings.not_found_image
         type: mediafinder
         span: auto
