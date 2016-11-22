@@ -1,4 +1,4 @@
-# CMS Pages
+# Image Resizer
 
 - [Introduction](#introduction)
 - [Resize from path](#string)
