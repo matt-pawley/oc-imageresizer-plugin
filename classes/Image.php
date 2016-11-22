@@ -7,7 +7,7 @@ class Image
 {
     /**
      * File path of image
-    */
+     */
     public $filePath;
 
     public function __construct($filePath = false)
@@ -32,7 +32,24 @@ class Image
      */
     public function resize($width = false, $height = false, $options = [])
     {
+        // Default settings
         $settings = Settings::instance();
+
+        if (!isset($options['mode'])) {
+            $options['mode'] = $settings->default_mode;
+        }
+        if (!isset($options['offset'])) {
+            $options['offset'] = $settings->default_offset;
+        }
+        if (!isset($options['extension'])) {
+            $options['extension'] = $settings->default_extension;
+        }
+        if (!isset($options['quality'])) {
+            $options['quality'] = $settings->default_quality;
+        }
+        if (!isset($options['sharpen'])) {
+            $options['sharpen'] = $settings->default_sharpen;
+        }
 
         // Not a file? Display the not found image
         if (!is_file($this->filePath)) {
@@ -87,6 +104,7 @@ class Image
      */
     protected function notFoundImage($width, $height)
     {
+        // Default settings
         $settings = Settings::instance();
 
         // Have we got a custom not found image? If so, serve this.
