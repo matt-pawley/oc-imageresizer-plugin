@@ -27,7 +27,7 @@ class Image
      *
      * @param integer $width The target width
      * @param integer $height The target height
-     * @param array   $optinons The options
+     * @param array   $options The options
      * @return string
      */
     public function resize($width = false, $height = false, $options = [])
@@ -35,19 +35,19 @@ class Image
         // Default settings
         $settings = Settings::instance();
 
-        if (!isset($options['mode'])) {
+        if (!isset($options['mode']) && $settings->default_mode) {
             $options['mode'] = $settings->default_mode;
         }
-        if (!isset($options['offset'])) {
-            $options['offset'] = $settings->default_offset;
+        if (!isset($options['offset']) && is_int($settings->default_offset_x) && is_int($settings->default_offset_y)) {
+            $options['offset'] = [$settings->default_offset_x, $settings->default_offset_y];
         }
-        if (!isset($options['extension'])) {
+        if (!isset($options['extension']) && $settings->default_extension) {
             $options['extension'] = $settings->default_extension;
         }
-        if (!isset($options['quality'])) {
+        if (!isset($options['quality']) && is_int($settings->default_quality)) {
             $options['quality'] = $settings->default_quality;
         }
-        if (!isset($options['sharpen'])) {
+        if (!isset($options['sharpen']) && is_int($settings->default_sharpen)) {
             $options['sharpen'] = $settings->default_sharpen;
         }
 
@@ -73,7 +73,8 @@ class Image
     }
 
     /**
-     * Creates a unique disk name for an image
+     * Parse the file name to get a relative path for the file
+     * This is mostly required for scenarios where a twig filter, e.g. theme has been applied.
      *
      * @return string
      */

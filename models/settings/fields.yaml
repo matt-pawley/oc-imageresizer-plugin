@@ -22,10 +22,18 @@ fields:
             'crop': toughdeveloper.imageresizer::lang.settings.mode_crop
         span: auto
 
-    default_offset:
-        label: toughdeveloper.imageresizer::lang.settings.default_offset_label
-        comment: toughdeveloper.imageresizer::lang.settings.default_offset_comment
-        default: '[0,0]'
+    default_offset_x:
+        label: toughdeveloper.imageresizer::lang.settings.default_offset_x_label
+        comment: toughdeveloper.imageresizer::lang.settings.default_offset_x_comment
+        default: 0
+        type: number
+        span: auto
+
+    default_offset_y:
+        label: toughdeveloper.imageresizer::lang.settings.default_offset_y_label
+        comment: toughdeveloper.imageresizer::lang.settings.default_offset_y_comment
+        default: 0
+        type: number
         span: auto
 
     default_extension:
