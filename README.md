@@ -1,4 +1,4 @@
-# CMS Pages
+# Image Resizer
 
 - [Introduction](#introduction)
 - [Resize from path](#string)
@@ -26,7 +26,7 @@ Please note, if the filter alters the URL, you must apply resize afterwards
 ## Using a variable
 
 ```
-{{ propery.image | resize(500) }}
+{{ property.image | resize(500) }}
 ```
 
 <a name="options"></a>
@@ -35,7 +35,7 @@ Please note, if the filter alters the URL, you must apply resize afterwards
 See list of options below
 
 ```
-{{ propery.image | resize(500, false, { mode: 'crop', quality: '80', extension: 'png' }) }}
+{{ property.image | resize(500, false, { mode: 'crop', quality: '80', extension: 'png' }) }}
 ```
 
 Key | Description | Default | Options
