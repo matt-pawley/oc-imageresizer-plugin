@@ -1,3 +1,4 @@
 1.0.1: First version of ImageResizer
 1.0.2: Fixes bug where url set in config/app.php affecting rendering of image.
-1.0.3: Adds Hungarian translation, thanks to INDIKÁTOR
+1.0.3: Adds Hungarian translation - thanks to Szabó Gergő
+1.1.0: Adds default settings to admin - thanks to Szabó Gergő
