@@ -23,7 +23,19 @@ class Settings extends Model
     ];
 
     public $rules = [
-        'default_quality'   => 'integer|between:0,100',
-        'default_sharpen'   => 'integer|between:0,100',
+        'default_quality'           => 'integer|between:0,100',
+        'default_sharpen'           => 'integer|between:0,100',
+        'tinypng_developer_key'     => 'required_if:enable_tinypng,1'
     ];
+
+    // Default setting data
+    public function initSettingsData()
+    {
+        $this->default_extension = 'auto';
+        $this->default_mode = 'auto';
+        $this->default_offset_x = 0;
+        $this->default_offset_y = 0;
+        $this->default_quality = 95;
+        $this->default_sharpen = 0;
+    }
 }

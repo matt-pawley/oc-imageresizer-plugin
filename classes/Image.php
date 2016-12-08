@@ -2,16 +2,39 @@
 
 use ToughDeveloper\ImageResizer\Models\Settings;
 use October\Rain\Database\Attach\File;
+use Tinify\Tinify;
+use Tinify\Source;
 
 class Image
 {
     /**
      * File path of image
      */
-    public $filePath;
+    protected $filePath;
+
+    /**
+     * Image Resizer Settings
+     */
+    protected $settings;
+
+    /**
+     * File Object
+     */
+    protected $file;
+
+    /**
+     * Thumb filename 
+     */
+    protected $thumbFilename;
 
     public function __construct($filePath = false)
     {
+        // Settings are needed often, so offset to variable
+        $this->settings = Settings::instance();
+
+        // Create a new file object
+        $this->file = new File;
+
         if ($filePath instanceof File) {
             $this->filePath = base_path() . $filePath->getPath();
             return;
@@ -28,54 +51,67 @@ class Image
      * @param integer $width The target width
      * @param integer $height The target height
      * @param array   $options The options
+     *
      * @return string
      */
     public function resize($width = false, $height = false, $options = [])
     {
-        // Default settings
-        $settings = Settings::instance();
-
-        if (!isset($options['mode']) && $settings->default_mode) {
-            $options['mode'] = $settings->default_mode;
-        }
-        if (!isset($options['offset']) && is_int($settings->default_offset_x) && is_int($settings->default_offset_y)) {
-            $options['offset'] = [$settings->default_offset_x, $settings->default_offset_y];
-        }
-        if (!isset($options['extension']) && $settings->default_extension) {
-            $options['extension'] = $settings->default_extension;
-        }
-        if (!isset($options['quality']) && is_int($settings->default_quality)) {
-            $options['quality'] = $settings->default_quality;
-        }
-        if (!isset($options['sharpen']) && is_int($settings->default_sharpen)) {
-            $options['sharpen'] = $settings->default_sharpen;
-        }
+        // Parse the default settings
+        $options = $this->parseDefaultSettings($options);
 
         // Not a file? Display the not found image
         if (!is_file($this->filePath)) {
             return $this->notFoundImage($width, $height);
         }
 
-        // Create a new file
-        $file = new File;
+        // If extension is auto, set the actual extension
+        if (strtolower($options['extension']) == 'auto') {
+           $options['extension'] = pathinfo($this->filePath)['extension'];
+        }
 
         // Set a disk name, this enables caching
-        $file->disk_name = $this->diskName();
+        $this->file->disk_name = $this->diskName();
 
-        // Set the file to be createed from another file
-        $file->fromFile($this->filePath);
+        // Set the thumbfilename to save passing variables to many functions
+        $this->thumbFilename = $this->getThumbFilename($width, $height, $options);
 
-        // Resize it
-        $thumb = $file->getThumb($width, $height, $options);
+        // If the image is cached, don't try resized it.
+        if (! $this->isImageCached()) {
+            // Set the file to be created from another file
+            $this->file->fromFile($this->filePath);
+
+            // Resize it
+            $thumb = $this->file->getThumb($width, $height, $options);
+
+            // A png file? Compress with tinyPNG
+            if ($options['extension'] == 'png' && $this->settings->enable_tinypng)
+            {
+                $this->compressWithTinyPng();
+            }
+        }
 
         // Return the URL
-        return url('/storage/app') . $this->parseFileName($thumb);
+        return $this->getCachedImagePath(true);
+    }
+
+    /**
+     * Compresses a png image using tinyPNG
+     * @return string
+     */
+    public function getCachedImagePath($public = false)
+    {
+        $filePath = $this->file->getStorageDirectory() . $this->getPartitionDirectory() . $this->thumbFilename;
+
+        if ($public === true) {
+            return url('/storage/app/' . $filePath);
+        }
+
+        return storage_path('app/' . $filePath);
     }
 
     /**
      * Parse the file name to get a relative path for the file
      * This is mostly required for scenarios where a twig filter, e.g. theme has been applied.
-     *
      * @return string
      */
     protected function parseFileName($filePath)
@@ -89,28 +125,55 @@ class Image
     }
 
     /**
+     * Works out the default settings
+     * @return string
+     */
+    protected function parseDefaultSettings($options = [])
+    {
+        if (!isset($options['mode']) && $this->settings->default_mode) {
+            $options['mode'] = $this->settings->default_mode;
+        }
+        if (!isset($options['offset']) && is_int($this->settings->default_offset_x) && is_int($this->settings->default_offset_y)) {
+            $options['offset'] = [$this->settings->default_offset_x, $this->settings->default_offset_y];
+        }
+        if (!isset($options['extension']) && $this->settings->default_extension) {
+            $options['extension'] = $this->settings->default_extension;
+        }
+        if (!isset($options['quality']) && is_int($this->settings->default_quality)) {
+            $options['quality'] = $this->settings->default_quality;
+        }
+        if (!isset($options['sharpen']) && is_int($this->settings->default_sharpen)) {
+            $options['sharpen'] = $this->settings->default_sharpen;
+        }
+
+        return $options;
+    }
+
+    /**
      * Creates a unique disk name for an image
-     *
      * @return string
      */
     protected function diskName()
     {
-        return md5($this->filePath);
+        $diskName = $this->filePath;
+        
+        // Ensures a unique filepath when tinypng compression is enabled
+        if ($this->settings->enable_tinypng) {
+            $diskName .= 'tinypng';
+        }
+
+        return md5($diskName);
     }
 
     /**
      * Serves a not found image
-     *
      * @return string
      */
     protected function notFoundImage($width, $height)
     {
-        // Default settings
-        $settings = Settings::instance();
-
         // Have we got a custom not found image? If so, serve this.
-        $imagePath = ($settings->not_found_image)
-            ? base_path() . config('cms.storage.media.path') . $settings->not_found_image
+        $imagePath = ($this->settings->not_found_image)
+            ? base_path() . config('cms.storage.media.path') . $this->settings->not_found_image
             : plugins_path('toughdeveloper/imageresizer/assets/default-not-found.jpg');
 
         // Create a new Image object to resize
@@ -120,5 +183,58 @@ class Image
         return $file->resize($width, $height, [
             'mode' => 'crop'
         ]);
+    }
+
+    /**
+     * Compresses a png image using tinyPNG
+     * @return string
+     */
+    protected function compressWithTinyPng()
+    {
+        try {
+            Tinify::setKey($this->settings->tinypng_developer_key);
+
+            $filePath = $this->getCachedImagePath();
+            $source = Source::fromFile($filePath);
+            $source->toFile($filePath);
+        }
+        catch (\Exception $e) {
+            // Log error - may help debug
+            \Log::error('Tiny PNG compress failed', [
+                'message'   => $e->getMessage(),
+                'code'      => $e->getCode()
+            ]);
+        }
+
+    }
+
+    /**
+     * Checks if the requested resize/compressed image is already cached
+     * @return bool
+     */
+    protected function isImageCached()
+    {
+        return is_file($this->getCachedImagePath());
+    }
+
+    /**
+    * Generates a partition for the file.
+    * return /ABC/DE1/234 for an name of ABCDE1234.
+    * @param Attachment $attachment
+    * @param string $styleName
+    * @return mixed
+    */
+    protected function getPartitionDirectory()
+    {
+        return implode('/', array_slice(str_split($this->diskName(), 3), 0, 3)) . '/';
+    }
+
+    /**
+     * Generates a thumbnail filename.
+     * @return string
+     */
+    protected function getThumbFilename($width, $height, $options)
+    {
+        return 'thumb__' . $width . 'x' . $height . '_' . $options['offset'][0] . '_' . $options['offset'][1] . '_' . $options['mode'] . '.' . $options['extension'];
     }
 }
