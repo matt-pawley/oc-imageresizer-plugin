@@ -25,7 +25,7 @@ return [
         'default_sharpen_label' => 'Default sharpen',
         'default_sharpen_comment' => 'Sharpen the image across a scale of 0 - 100 (requires cache clear).',
         'tinypng_hint' => 'To obtain your developer key for <a href="http://tinypng.com" target="_blank">TinyPNG</a>, please visit <a href="https://tinypng.com/developers" target="_blank">https://tinypng.com/developers</a>. Enter your email address and a link to your developer key will be emailed across to you. The first 500 compressions a month are free, compressed images are cached to reduce the number of requests and for most sites this will suffice. It is recommended to keep the number of requests to a minimum, to only enable this setting on production servers.',
-        'enable_tinypng_label' => 'Compress JPG and PNG images with TinyPNG',
+        'enable_tinypng_label' => 'Compress PNG images with TinyPNG',
         'enable_tinypng_comment' => 'Adds the ability to run png images through tinypng.com API to reduce filesize',
         'tinypng_developer_key_label' => 'Developer Key',
         'tinypng_developer_key_comment' => 'See above for details of how to obtain this',
