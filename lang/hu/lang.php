@@ -26,7 +26,7 @@ return [
         'default_sharpen_comment' => 'A kép élesítésének mértéke. 0 és 100 közötti érték lehet.',
         'tinypng_hint' => 'A <a href="http://tinypng.com" target="_blank">TinyPNG</a> használatához először regisztráljon a <a href="https://tinypng.com/developers" target="_blank">https://tinypng.com/developers</a> címen. Ezt követően e-mailben fog kapni egy linket, amin keresztül elérheti a személyes fejlesztői kulcsát. Az első 500 tömörítés ingyenes minden hónapban. Javasoljuk, hogy a havi keret túllépésének elkerülése érdekében, csak éles weboldalnál kapcsolja be a szolgáltatást.',
         'enable_tinypng_label' => 'Képek tömörítése a TinyPNG segítségével',
-        'enable_tinypng_comment' => 'A jpg és png kiterjesztésű képek méretének csökkentése a szolgáltatással használatával.',
+        'enable_tinypng_comment' => 'A png kiterjesztésű képek méretének csökkentése a szolgáltatással használatával.',
         'tinypng_developer_key_label' => 'Fejlesztői kulcs',
         'tinypng_developer_key_comment' => 'A részleteket a fenti leírásban találja.',
         'auto' => 'Automatikus',
