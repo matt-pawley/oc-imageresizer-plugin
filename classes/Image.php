@@ -42,7 +42,7 @@ class Image
 
         $this->filePath = (file_exists($filePath))
             ? $filePath
-            : base_path() . $this->parseFileName($filePath);
+            : base_path() . DIRECTORY_SEPARATOR . $this->parseFileName($filePath);
     }
 
     /**
@@ -116,12 +116,7 @@ class Image
      */
     protected function parseFileName($filePath)
     {
-        return str_replace([
-            config('app.url'),
-            'http://',
-            'https://',
-            'localhost',
-        ], '', $filePath);
+        return parse_url($filePath, PHP_URL_PATH);
     }
 
     /**
@@ -235,6 +230,9 @@ class Image
      */
     protected function getThumbFilename($width, $height, $options)
     {
+        $width = (integer) $width;
+        $height = (integer) $height;
+        
         return 'thumb__' . $width . 'x' . $height . '_' . $options['offset'][0] . '_' . $options['offset'][1] . '_' . $options['mode'] . '.' . $options['extension'];
     }
 }
