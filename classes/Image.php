@@ -83,8 +83,8 @@ class Image
             // Resize it
             $thumb = $this->file->getThumb($width, $height, $options);
 
-            // A png file? Compress with tinyPNG
-            if ($options['extension'] == 'png' && $this->settings->enable_tinypng)
+            // Not a gif file? Compress with tinyPNG
+            if ($options['extension'] != 'gif' && $this->settings->enable_tinypng)
             {
                 $this->compressWithTinyPng();
             }

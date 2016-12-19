@@ -3,3 +3,4 @@
 1.0.3: Adds Hungarian translation - thanks to Szabó Gergő
 1.1.0: Adds default settings to admin - thanks to Szabó Gergő
 1.2.0: Adds optional PNG compression support via Tiny PNG
+1.2.1: Updates translations and allows jpg files to be compressed with Tiny PNG
