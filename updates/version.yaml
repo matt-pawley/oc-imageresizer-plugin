@@ -4,3 +4,4 @@
 1.1.0: Adds default settings to admin - thanks to Szabó Gergő
 1.2.0: Adds optional PNG compression support via Tiny PNG
 1.2.1: Updates translations and allows jpg files to be compressed with Tiny PNG
+1.2.2: Ensures false can be passed to auto width/height. Also improves URL parsing so different formats of app.url work as expected. Thanks to Emerge.
