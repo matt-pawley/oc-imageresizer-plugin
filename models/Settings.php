@@ -15,11 +15,15 @@ class Settings extends Model
 
     public $settingsFields = 'fields.yaml';
 
+    public $customMessages = [
+       'valid_tinypng_key' => 'The tinypng key entered could not be validated, please check the key and try again.'
+    ];
+
     protected $casts = [
         'default_offset_x' => 'integer',
         'default_offset_y' => 'integer',
         'default_quality'  => 'integer',
-        'default_sharpen'  => 'integer',
+        'default_sharpen'  => 'integer'
     ];
 
     public $rules = [
@@ -27,6 +31,13 @@ class Settings extends Model
         'default_sharpen'           => 'integer|between:0,100',
         'tinypng_developer_key'     => 'required_if:enable_tinypng,1'
     ];
+
+    public function beforeValidate()
+    {
+        if ($this->enable_tinypng == 1) {
+            $this->rules['tinypng_developer_key'] .= '|valid_tinypng_key';
+        }
+    }
 
     // Default setting data
     public function initSettingsData()

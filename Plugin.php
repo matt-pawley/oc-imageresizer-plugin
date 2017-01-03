@@ -2,6 +2,7 @@
 
 use System\Classes\PluginBase;
 use ToughDeveloper\ImageResizer\Classes\Image;
+use Validator;
 
 /**
  * ImageResizer Plugin Information File
@@ -37,6 +38,19 @@ class Plugin extends PluginBase
                 'label' => 'toughdeveloper.imageresizer::lang.permission.label'
             ]
         ];
+    }
+
+    public function boot(){
+        Validator::extend('valid_tinypng_key', function($attribute, $value, $parameters) {
+            try {
+                \Tinify\setKey($value);
+                \Tinify\validate();
+            } catch(\Tinify\Exception $e) {
+                return false;
+            }
+
+            return true;
+        });
     }
 
     public function registerMarkupTags()
