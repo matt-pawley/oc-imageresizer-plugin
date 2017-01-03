@@ -33,12 +33,12 @@ if ($validKey)
 	    <div data-control="toolbar">
 	        <div class="scoreboard-item control-chart" data-control="chart-pie">
 	            <ul>
-	                <li data-color="#95b753">Compressed Images <span><?=$compressionsThisMonth?></span></li>
-	                <li data-color="#e5a91a">Remaining Free Compressions <span><?=$remainingFree?></span></li>
+	                <li data-color="#95b753"><?= \Lang::get('toughdeveloper.imageresizer::lang.settings.tinypng_compressed_images') ?> <span><?=$compressionsThisMonth?></span></li>
+	                <li data-color="#e5a91a"><?= \Lang::get('toughdeveloper.imageresizer::lang.settings.tinypng_remaining_compressions') ?> <span><?=$remainingFree?></span></li>
 	            </ul>
 	        </div>
 	        <div class="scoreboard-item title-value">
-	            <h4>Days until reset</h4>
+	            <h4><?= \Lang::get('toughdeveloper.imageresizer::lang.settings.tinypng_days_until_reset') ?></h4>
 	            <p><?=$daysUntilRenew?></p>
 	        </div>
 	    </div>
