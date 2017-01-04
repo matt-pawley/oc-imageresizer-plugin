@@ -91,7 +91,7 @@ class Image
         }
 
         // Return the URL
-        return $this->getCachedImagePath(true);
+        return $this;
     }
 
     /**
@@ -234,5 +234,23 @@ class Image
         $height = (integer) $height;
         
         return 'thumb__' . $width . 'x' . $height . '_' . $options['offset'][0] . '_' . $options['offset'][1] . '_' . $options['mode'] . '.' . $options['extension'];
+    }
+
+    /**
+     * Render an image tag
+     * @return string
+     */
+    public function render()
+    {
+        return '<img src="' . $this . '" />';
+    }
+
+    /**
+     * Magic method to return the file path
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getCachedImagePath(true);
     }
 }

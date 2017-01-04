@@ -78,4 +78,40 @@ class Plugin extends PluginBase
             ]
         ];
     }
+
+    public function registerListColumnTypes()
+    {
+        return [
+            'thumb' => [$this, 'evalThumbListColumn'],
+        ];
+    }
+
+    public function evalThumbListColumn($value, $column, $record)
+    {
+        $config = $column->config;
+
+        // Get config options with defaults
+        $width = isset($config['width']) ? $config['width'] : 50;
+        $height = isset($config['height']) ? $config['height'] : 50;
+        $options = isset($config['options']) ? $config['options'] : [];
+
+        // attachMany relation?
+        if (isset($record['attachMany'][$column->columnName]))
+        {
+            $file = $value->first();
+        }
+        // attachOne relation?
+        else if (isset($record['attachOne'][$column->columnName]))
+        {
+            $file = $value;
+        }
+        // Mediafinder
+        else
+        {
+            $file = storage_path() . '/app/media' . $value;
+        }
+
+        $image = new Image($file);
+        return $image->resize($width, $height, $options)->render();
+    }
 }
