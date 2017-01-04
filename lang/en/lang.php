@@ -33,7 +33,10 @@ return [
         'mode_exact' => 'Exact',
         'mode_portrait' => 'Portrait',
         'mode_landscape' => 'Landscape',
-        'mode_crop' => 'Crop'
+        'mode_crop' => 'Crop',
+        'tinypng_compressed_images' => 'Compressed Images',
+        'tinypng_remaining_compressions' => 'Remaining Free Compressions',
+        'tinypng_days_until_reset' => 'Days until reset'
     ],
     'permission' => [
         'tab' => 'Image Resizer',

@@ -5,6 +5,7 @@
 - [Resize from variable](#variable)
 - [Additional Options](#options)
 - [Usage in PHP](#php)
+- [Usage in Backend List](#php)
 
 <a name="introduction"></a>
 ## Introduction
@@ -42,17 +43,47 @@ Key | Description | Default | Options
 --- | --- | --- | ---
 mode | How the image should be fitted to dimensions | auto | exact, portrait, landscape, auto, crop
 offset | Offset the resized image | [0,0] | [int, int]
-extension | The extension on the image to return | auto | jpg, jpeg, gif, png
+extension | The extension on the image to return | auto | auto, jpg, jpeg, gif, png
 quality | The quality of compression _*requires cache clear_ | 95 | 0-100
 sharpen | Sharpen the image across a scale of 0 - 100 _*requires cache clear_ | 0 | 0-100
 
 <a name="php"></a>
 ## Usage in PHP
 
-The image reizer can also be used easily in PHP, as follows:
+The image resizer can also be used easily in PHP, as follows:
 
 ```
 use ToughDeveloper\ImageResizer\Classes\Image;
 
 $image = new Image('/path/to/image.jpg');
 $image->resize(150, 200, [ 'mode' => 'crop' ]);
+```
+
+<a name="backendList"></a>
+## Usage in Backend List
+
+The image resizer can also be used on backend lists with the type of `thumb`, e.g.
+
+```
+image:
+	label: Image
+	type: thumb
+```
+
+This works with:
+
+ - AttachMany (uses first image) [Docs](https://ochttps://stackedit.io/editor#tobercms.com/docs/backend/forms#widget-fileupload)
+ - AttachOne [Docs](https://ochttps://stackedit.io/editor#tobercms.com/docs/backend/forms#widget-fileupload)
+ - Mediafinder [Docs](https://octobercms.com/docs/backend/forms#widget-mediafinder)
+
+You can also optionally pass width (default 50), height (default 50) and options as follows:
+
+```
+image:
+	label: Image
+	type: thumb
+	width: 75
+	height: 100
+	options:
+		mode: crop
+```

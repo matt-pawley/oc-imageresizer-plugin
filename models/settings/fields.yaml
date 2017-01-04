@@ -79,6 +79,15 @@ tabs:
                 field: enable_tinypng
                 condition: checked
 
+        tinypng_stats:
+            type: partial
+            path: $/toughdeveloper/imageresizer/models/settings/_tinypng_stats.htm
+            tab: toughdeveloper.imageresizer::lang.settings.tab_advanced
+            trigger:
+                action: show
+                field: enable_tinypng
+                condition: checked
+
         enable_tinypng:
             label: toughdeveloper.imageresizer::lang.settings.enable_tinypng_label
             comment: toughdeveloper.imageresizer::lang.settings.enable_tinypng_comment

@@ -33,7 +33,10 @@ return [
         'mode_exact' => 'Pontos',
         'mode_portrait' => 'Álló',
         'mode_landscape' => 'Fekvő',
-        'mode_crop' => 'Levágott'
+        'mode_crop' => 'Levágott',
+        'tinypng_compressed_images' => 'sűrített Képek',
+        'tinypng_remaining_compressions' => 'Megmaradt szabad compressio',
+        'tinypng_days_until_reset' => 'Napok törléséig'
     ],
     'permission' => [
         'tab' => 'Képméretezés',

@@ -1,0 +1,47 @@
+<?php
+$validKey = false;
+$key = $this->formWidget->data->tinypng_developer_key;
+
+if ($key) {
+    try {
+		\Tinify\setKey($key);
+		\Tinify\validate();
+
+		$validKey = true;
+
+		$compressionsThisMonth = (int) \Tinify\compressionCount();
+		$remainingFree = max(0, 500 - $compressionsThisMonth);
+    } catch(\Tinify\Exception $e) {
+
+    }
+}
+
+$currentDate = new DateTime(date('Y-m-d'));
+$currentDate->add(new DateInterval('P1M'));
+$firstDayOfNextMonth = $currentDate->format('Y-m-1');
+$firstDayOfNextMonth = new DateTime($firstDayOfNextMonth);
+
+$now = new DateTime();
+$interval = $now->diff($firstDayOfNextMonth);
+$daysUntilRenew = $interval->format('%a');
+
+
+if ($validKey)
+{
+	?>
+	<div class="scoreboard">
+	    <div data-control="toolbar">
+	        <div class="scoreboard-item control-chart" data-control="chart-pie">
+	            <ul>
+	                <li data-color="#95b753"><?= \Lang::get('toughdeveloper.imageresizer::lang.settings.tinypng_compressed_images') ?> <span><?=$compressionsThisMonth?></span></li>
+	                <li data-color="#e5a91a"><?= \Lang::get('toughdeveloper.imageresizer::lang.settings.tinypng_remaining_compressions') ?> <span><?=$remainingFree?></span></li>
+	            </ul>
+	        </div>
+	        <div class="scoreboard-item title-value">
+	            <h4><?= \Lang::get('toughdeveloper.imageresizer::lang.settings.tinypng_days_until_reset') ?></h4>
+	            <p><?=$daysUntilRenew?></p>
+	        </div>
+	    </div>
+	</div>
+	<?php
+}
