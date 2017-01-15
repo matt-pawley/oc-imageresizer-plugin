@@ -4,6 +4,8 @@ use ToughDeveloper\ImageResizer\Models\Settings;
 use October\Rain\Database\Attach\File;
 use Tinify\Tinify;
 use Tinify\Source;
+use Storage;
+use Cms\Classes\MediaLibrary;
 
 class Image
 {
@@ -35,14 +37,20 @@ class Image
         // Create a new file object
         $this->file = new File;
 
+        $this->filePath = $filePath;
+
         if ($filePath instanceof File) {
             $this->filePath = base_path() . $filePath->getPath();
             return;
         }
 
-        $this->filePath = (file_exists($filePath))
-            ? $filePath
-            : base_path() . DIRECTORY_SEPARATOR . $this->parseFileName($filePath);
+        if ($this->isLocalStorage())
+        {
+            $this->filePath = (file_exists($filePath))
+                ? $filePath
+                : base_path() . DIRECTORY_SEPARATOR . $this->parseFileName($filePath);
+        }
+
     }
 
     /**
@@ -94,19 +102,25 @@ class Image
         return $this;
     }
 
+    public function getPublicPath($public = false)
+    {
+        $this->file->getPublicPath();
+    }
+
     /**
      * Compresses a png image using tinyPNG
      * @return string
      */
     public function getCachedImagePath($public = false)
     {
-        $filePath = $this->file->getStorageDirectory() . $this->getPartitionDirectory() . $this->thumbFilename;
+        $filePath = $this->getPartitionDirectory() . $this->thumbFilename;
 
         if ($public === true) {
-            return url('/storage/app/' . $filePath);
+            $asMediaPath = MediaLibrary::url($filePath);    
+            return str_replace('media', config('cms.storage.uploads.folder') . '/public', $asMediaPath);
         }
 
-        return storage_path('app/' . $filePath);
+        return storage_path('app/' . $this->file->getStorageDirectory() . $filePath);
     }
 
     /**
@@ -209,6 +223,7 @@ class Image
      */
     protected function isImageCached()
     {
+        return false;
         return is_file($this->getCachedImagePath());
     }
 
@@ -234,6 +249,15 @@ class Image
         $height = (integer) $height;
         
         return 'thumb__' . $width . 'x' . $height . '_' . $options['offset'][0] . '_' . $options['offset'][1] . '_' . $options['mode'] . '.' . $options['extension'];
+    }
+
+    /**
+     * Returns true if the storage engine is local.
+     * @return bool
+     */
+    protected function isLocalStorage()
+    {
+        return Storage::getDefaultDriver() == 'local';
     }
 
     /**
