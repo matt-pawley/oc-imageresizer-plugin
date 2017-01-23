@@ -6,3 +6,4 @@
 1.2.1: Updates translations and allows jpg files to be compressed with Tiny PNG
 1.2.2: Ensures false can be passed to auto width/height. Also improves URL parsing so different formats of app.url work as expected. Thanks to Emerge.
 1.3.0: Adds TinyPNG API key validation, TinyPNG usage statistics and provides thumb backend list column type
+1.3.1: Ensures plugin works as expected when October is installed to a sub-directory.

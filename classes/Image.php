@@ -36,13 +36,13 @@ class Image
         $this->file = new File;
 
         if ($filePath instanceof File) {
-            $this->filePath = base_path() . $filePath->getPath();
+            $this->filePath = $filePath->getLocalPath();
             return;
         }
 
         $this->filePath = (file_exists($filePath))
             ? $filePath
-            : base_path() . DIRECTORY_SEPARATOR . $this->parseFileName($filePath);
+            : $this->parseFileName($filePath);
     }
 
     /**
@@ -116,7 +116,27 @@ class Image
      */
     protected function parseFileName($filePath)
     {
-        return parse_url($filePath, PHP_URL_PATH);
+        $path = parse_url($filePath, PHP_URL_PATH);
+
+        // Create array of commonly used folders
+        // These will be used to try capture the actual file path to an image without the sub-directory path
+        $folders = [
+            config('cms.themesPath'),
+            config('cms.pluginsPath'),
+            config('cms.storage.uploads.path'),
+            config('cms.storage.media.path')
+        ];
+
+        foreach($folders as $folder)
+        {
+            if (str_contains($path, $folder))
+            {
+                $paths = explode($folder, $path, 2);
+                return base_path($folder . end($paths));
+            }
+        }
+
+        return base_path($path);
     }
 
     /**
