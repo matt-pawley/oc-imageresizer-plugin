@@ -7,3 +7,4 @@
 1.2.2: Ensures false can be passed to auto width/height. Also improves URL parsing so different formats of app.url work as expected. Thanks to Emerge.
 1.3.0: Adds TinyPNG API key validation, TinyPNG usage statistics and provides thumb backend list column type
 1.3.1: Ensures plugin works as expected when October is installed to a sub-directory.
+1.3.2: Adds option to skip compression of certain images, helpful to save credits.

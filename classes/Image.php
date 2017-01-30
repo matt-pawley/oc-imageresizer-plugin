@@ -23,6 +23,11 @@ class Image
     protected $file;
 
     /**
+     * Options Array
+     */
+    protected $options;
+
+    /**
      * Thumb filename 
      */
     protected $thumbFilename;
@@ -57,7 +62,7 @@ class Image
     public function resize($width = false, $height = false, $options = [])
     {
         // Parse the default settings
-        $options = $this->parseDefaultSettings($options);
+        $this->options = $this->parseDefaultSettings($options);
 
         // Not a file? Display the not found image
         if (!is_file($this->filePath)) {
@@ -65,15 +70,15 @@ class Image
         }
 
         // If extension is auto, set the actual extension
-        if (strtolower($options['extension']) == 'auto') {
-           $options['extension'] = pathinfo($this->filePath)['extension'];
+        if (strtolower($this->options['extension']) == 'auto') {
+           $this->options['extension'] = pathinfo($this->filePath)['extension'];
         }
 
         // Set a disk name, this enables caching
         $this->file->disk_name = $this->diskName();
 
         // Set the thumbfilename to save passing variables to many functions
-        $this->thumbFilename = $this->getThumbFilename($width, $height, $options);
+        $this->thumbFilename = $this->getThumbFilename($width, $height);
 
         // If the image is cached, don't try resized it.
         if (! $this->isImageCached()) {
@@ -81,11 +86,10 @@ class Image
             $this->file->fromFile($this->filePath);
 
             // Resize it
-            $thumb = $this->file->getThumb($width, $height, $options);
+            $thumb = $this->file->getThumb($width, $height, $this->options);
 
             // Not a gif file? Compress with tinyPNG
-            if ($options['extension'] != 'gif' && $this->settings->enable_tinypng)
-            {
+            if ($this->isCompressionEnabled()) {
                 $this->compressWithTinyPng();
             }
         }
@@ -160,6 +164,9 @@ class Image
         if (!isset($options['sharpen']) && is_int($this->settings->default_sharpen)) {
             $options['sharpen'] = $this->settings->default_sharpen;
         }
+        if (!isset($options['compress'])) {
+            $options['compress'] = true;
+        }
 
         return $options;
     }
@@ -173,7 +180,7 @@ class Image
         $diskName = $this->filePath;
         
         // Ensures a unique filepath when tinypng compression is enabled
-        if ($this->settings->enable_tinypng) {
+        if ($this->isCompressionEnabled()) {
             $diskName .= 'tinypng';
         }
 
@@ -233,6 +240,15 @@ class Image
     }
 
     /**
+     * Checks if image compression is enabled for this image.
+     * @return bool
+     */
+    protected function isCompressionEnabled()
+    {
+        return ($this->options['extension'] != 'gif' && $this->settings->enable_tinypng && $this->options['compress']);
+    }
+
+    /**
     * Generates a partition for the file.
     * return /ABC/DE1/234 for an name of ABCDE1234.
     * @param Attachment $attachment
@@ -248,12 +264,12 @@ class Image
      * Generates a thumbnail filename.
      * @return string
      */
-    protected function getThumbFilename($width, $height, $options)
+    protected function getThumbFilename($width, $height)
     {
         $width = (integer) $width;
         $height = (integer) $height;
         
-        return 'thumb__' . $width . 'x' . $height . '_' . $options['offset'][0] . '_' . $options['offset'][1] . '_' . $options['mode'] . '.' . $options['extension'];
+        return 'thumb__' . $width . 'x' . $height . '_' . $this->options['offset'][0] . '_' . $this->options['offset'][1] . '_' . $this->options['mode'] . '.' . $this->options['extension'];
     }
 
     /**
