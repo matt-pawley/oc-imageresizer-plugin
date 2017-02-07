@@ -8,3 +8,4 @@
 1.3.0: Adds TinyPNG API key validation, TinyPNG usage statistics and provides thumb backend list column type
 1.3.1: Ensures plugin works as expected when October is installed to a sub-directory.
 1.3.2: Adds option to skip compression of certain images, helpful to save credits.
+1.3.3: Updates Hungarian translations - thanks to Szabó Gergő
