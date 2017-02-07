@@ -1,6 +1,7 @@
 <?php namespace ToughDeveloper\ImageResizer\Models;
 
 use Model;
+use Lang;
 
 /**
  * Settings Model
@@ -15,10 +16,6 @@ class Settings extends Model
 
     public $settingsFields = 'fields.yaml';
 
-    public $customMessages = [
-       'valid_tinypng_key' => 'The tinypng key entered could not be validated, please check the key and try again.'
-    ];
-
     protected $casts = [
         'default_offset_x' => 'integer',
         'default_offset_y' => 'integer',
@@ -31,6 +28,14 @@ class Settings extends Model
         'default_sharpen'           => 'integer|between:0,100',
         'tinypng_developer_key'     => 'required_if:enable_tinypng,1'
     ];
+
+    public $customMessages = [];
+
+    public function __construct(){
+        $this->customMessages['valid_tinypng_key'] = Lang::get('toughdeveloper.imageresizer::lang.settings.tinypng_invalid_key');
+
+        parent::__construct();
+    }
 
     public function beforeValidate()
     {

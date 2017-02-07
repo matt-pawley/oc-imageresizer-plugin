@@ -34,6 +34,7 @@ return [
         'mode_portrait' => 'Portrait',
         'mode_landscape' => 'Landscape',
         'mode_crop' => 'Crop',
+        'tinypng_invalid_key' => 'The tinypng key entered could not be validated, please check the key and try again.',
         'tinypng_compressed_images' => 'Compressed Images',
         'tinypng_remaining_compressions' => 'Remaining Free Compressions',
         'tinypng_days_until_reset' => 'Days until reset'

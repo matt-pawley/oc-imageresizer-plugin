@@ -34,6 +34,7 @@ return [
         'mode_portrait' => 'Álló',
         'mode_landscape' => 'Fekvő',
         'mode_crop' => 'Levágott',
+        'tinypng_invalid_key' => 'A megadott tinypng kulcsot nem lehet érvényesíteni. Kérjük ellenőrizze és próbálja újra.',
         'tinypng_compressed_images' => 'Tömörített képek',
         'tinypng_remaining_compressions' => 'Fennmaradó kompresszió',
         'tinypng_days_until_reset' => 'Napok törlésig'
