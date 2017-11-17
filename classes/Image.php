@@ -269,7 +269,7 @@ class Image
         $width = (integer) $width;
         $height = (integer) $height;
         
-        return 'thumb__' . $width . 'x' . $height . '_' . $this->options['offset'][0] . '_' . $this->options['offset'][1] . '_' . $this->options['mode'] . '.' . $this->options['extension'];
+        return 'thumb__' . $width . '_' . $height . '_' . $this->options['offset'][0] . '_' . $this->options['offset'][1] . '_' . $this->options['mode'] . '.' . $this->options['extension'];
     }
 
     /**
