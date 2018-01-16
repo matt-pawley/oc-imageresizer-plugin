@@ -1,4 +1,8 @@
 {
+    "name": "toughdeveloper/imageresizer",
+    "description": "October CMS Plugin to resize and compress images.",
+    "license": "MIT",
+    "website": "https://octobercms.com/plugin/toughdeveloper-imageresizer",
     "require": {
         "tinify/tinify": "^1.3"
     }
