@@ -194,9 +194,14 @@ class Image
     protected function notFoundImage($width, $height)
     {
         // Have we got a custom not found image? If so, serve this.
-        $imagePath = ($this->settings->not_found_image)
-            ? base_path() . config('cms.storage.media.path') . $this->settings->not_found_image
-            : plugins_path('toughdeveloper/imageresizer/assets/default-not-found.jpg');
+        if ($this->settings->not_found_image) {
+            $imagePath = base_path() . config('cms.storage.media.path') . $this->settings->not_found_image;
+        }
+
+        // If we do not have an existing custom not found image, use the default from this plugin
+        if (!isset($imagePath) || !file_exists($imagePath)) {
+            $imagePath = plugins_path('toughdeveloper/imageresizer/assets/default-not-found.jpg');
+        }
 
         // Create a new Image object to resize
         $file = new Self($imagePath);
