@@ -11,3 +11,4 @@
 1.3.3: Updates Hungarian translations - thanks to Szabó Gergő
 1.3.4: Adds German translation - thanks to Christoph (emptynick)
 1.3.5: !!! Changes path to cached image for builds of October 420+. Thanks to that0n3guy
+1.3.6: Prevent infinite loop when custom not found image does not exist. Thanks to yapsr
