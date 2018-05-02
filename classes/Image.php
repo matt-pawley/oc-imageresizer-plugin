@@ -236,12 +236,28 @@ class Image
     }
 
     /**
-     * Checks if the requested resize/compressed image is already cached
+     * Checks if the requested resize/compressed image is already cached.
+     * Removes the cached image if the original image is newer.
+     *
      * @return bool
      */
     protected function isImageCached()
     {
-        return is_file($this->getCachedImagePath());
+        // if there is no cached image return false
+        if (!is_file($cached_img = $this->getCachedImagePath())) {
+            return false;
+        }
+
+        // if cached image is newer than source file, the image is already cached
+        if (filemtime($this->filePath) - filemtime($cached_img) < 0) {
+            return true;
+        }
+
+        // delete older cached file
+        unlink($cached_img);
+
+        // generate new cache file
+        return false;
     }
 
     /**
