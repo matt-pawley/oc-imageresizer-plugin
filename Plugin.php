@@ -96,12 +96,12 @@ class Plugin extends PluginBase
         $options = isset($config['options']) ? $config['options'] : [];
 
         // attachMany relation?
-        if (isset($record['attachMany'][$column->columnName]))
+        if (isset($record->attachMany[$column->columnName]))
         {
             $file = $value->first();
         }
         // attachOne relation?
-        else if (isset($record['attachOne'][$column->columnName]))
+        else if (isset($record->attachOne[$column->columnName]))
         {
             $file = $value;
         }
