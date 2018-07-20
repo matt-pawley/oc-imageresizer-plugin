@@ -92,6 +92,10 @@ class Image
             if ($this->isCompressionEnabled()) {
                 $this->compressWithTinyPng();
             }
+
+            // Touch the cached image with the original file mime time, so
+            // it get cached correctly.
+            touch($this->getCachedImagePath(), filemtime($this->filePath));
         }
 
         // Return the URL
@@ -249,7 +253,7 @@ class Image
         }
 
         // if cached image is newer than source file, the image is already cached
-        if (filemtime($this->filePath) - filemtime($cached_img) < 0) {
+        if (filemtime($this->filePath) === filemtime($cached_img)) {
             return true;
         }
 
