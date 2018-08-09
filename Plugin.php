@@ -60,6 +60,18 @@ class Plugin extends PluginBase
                 'resize' => function($file_path, $width = false, $height = false, $options = []) {
                     $image = new Image($file_path);
                     return $image->resize($width, $height, $options);
+                },
+                'imageWidth' => function($image) {
+                    if (!$image instanceOf Image) {
+                        $image = new Image($image);
+                    }
+                    return getimagesize($image->getCachedImagePath())[0];
+                },
+                'imageHeight' => function($image) {
+                    if (!$image instanceOf Image) {
+                        $image = new Image($image);
+                    }
+                    return getimagesize($image->getCachedImagePath())[1];
                 }
             ]
         ];
