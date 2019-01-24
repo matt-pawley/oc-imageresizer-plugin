@@ -120,7 +120,7 @@ class Image
      */
     protected function parseFileName($filePath)
     {
-        $path = parse_url($filePath, PHP_URL_PATH);
+        $path = urldecode(parse_url($filePath, PHP_URL_PATH));
 
         // Create array of commonly used folders
         // These will be used to try capture the actual file path to an image without the sub-directory path
