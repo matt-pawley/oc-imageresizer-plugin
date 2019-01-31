@@ -58,7 +58,7 @@ class Plugin extends PluginBase
         return [
             'filters' => [
                 'resize' => function($file_path, $width = false, $height = false, $options = []) {
-                    $image = new Image($file_path);
+                    $image = new Image(rawurldecode($file_path));
                     return $image->resize($width, $height, $options);
                 }
             ]
