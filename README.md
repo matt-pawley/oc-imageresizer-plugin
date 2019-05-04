@@ -51,7 +51,7 @@ See list of options below
 
 Key | Description | Default | Options
 --- | --- | --- | ---
-mode | How the image should be fitted to dimensions | auto | exact, portrait, landscape, auto, crop
+mode | How the image should be fitted to dimensions | auto | exact, portrait, landscape, auto, fit or crop
 offset | Offset the resized image | [0,0] | [int, int]
 extension | The extension on the image to return | auto | auto, jpg, jpeg, gif, png
 quality | The quality of compression _*requires cache clear_ | 95 | 0-100
