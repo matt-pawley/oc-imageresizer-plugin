@@ -83,8 +83,8 @@ image:
 
 This works with:
 
- - AttachMany (uses first image) [Docs](https://ochttps://stackedit.io/editor#tobercms.com/docs/backend/forms#widget-fileupload)
- - AttachOne [Docs](https://ochttps://stackedit.io/editor#tobercms.com/docs/backend/forms#widget-fileupload)
+ - AttachMany (uses first image) [Docs](https://octobercms.com/docs/backend/forms#widget-fileupload)
+ - AttachOne [Docs](https://octobercms.com/docs/backend/forms#widget-fileupload)
  - Mediafinder [Docs](https://octobercms.com/docs/backend/forms#widget-mediafinder)
 
 You can also optionally pass width (default 50), height (default 50) and options as follows:
