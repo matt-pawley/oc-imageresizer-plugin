@@ -5,6 +5,7 @@
     "license": "MIT",
     "website": "https://octobercms.com/plugin/toughdeveloper-imageresizer",
     "require": {
+        "composer/installers": "~1.0",
         "tinify/tinify": "^1.3"
     }
 }
