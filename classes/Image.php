@@ -93,8 +93,7 @@ class Image
                 $this->compressWithTinyPng();
             }
 
-            // Touch the cached image with the original file mime time, so
-            // it get cached correctly.
+            // Touch the cached image with the original mtime to align them
             touch($this->getCachedImagePath(), filemtime($this->filePath));
         }
 
@@ -241,7 +240,7 @@ class Image
 
     /**
      * Checks if the requested resize/compressed image is already cached.
-     * Removes the cached image if the original image is newer.
+     * Removes the cached image if the original image has a different mtime.
      *
      * @return bool
      */
@@ -252,7 +251,7 @@ class Image
             return false;
         }
 
-        // if cached image is newer than source file, the image is already cached
+        // if cached image mtime match, the image is already cached
         if (filemtime($this->filePath) === filemtime($cached_img)) {
             return true;
         }
