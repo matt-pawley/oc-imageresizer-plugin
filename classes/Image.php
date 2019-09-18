@@ -28,7 +28,7 @@ class Image
     protected $options;
 
     /**
-     * Thumb filename 
+     * Thumb filename
      */
     protected $thumbFilename;
 
@@ -95,6 +95,8 @@ class Image
 
             // Touch the cached image with the original mtime to align them
             touch($this->getCachedImagePath(), filemtime($this->filePath));
+            
+            $this->deleteTempFile();
         }
 
         // Return the URL
@@ -102,7 +104,7 @@ class Image
     }
 
     /**
-     * Compresses a png image using tinyPNG
+     * Gets the path for the thumbnail
      * @return string
      */
     public function getCachedImagePath($public = false)
@@ -114,6 +116,11 @@ class Image
         }
 
         return storage_path('app/' . $filePath);
+    }
+
+    protected function deleteTempFile()
+    {
+        unlink(storage_path('app/' . $this->file->getStorageDirectory() . $this->getPartitionDirectory() . $this->file->disk_name));
     }
 
     /**
@@ -181,7 +188,7 @@ class Image
     protected function diskName()
     {
         $diskName = $this->filePath;
-        
+
         // Ensures a unique filepath when tinypng compression is enabled
         if ($this->isCompressionEnabled()) {
             $diskName .= 'tinypng';
@@ -292,7 +299,7 @@ class Image
     {
         $width = (integer) $width;
         $height = (integer) $height;
-        
+
         return 'thumb__' . $width . '_' . $height . '_' . $this->options['offset'][0] . '_' . $this->options['offset'][1] . '_' . $this->options['mode'] . '.' . $this->options['extension'];
     }
 
