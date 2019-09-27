@@ -6,7 +6,7 @@
 - [Image Compression](#compression)
 - [Additional Options](#options)
 - [Usage in PHP](#php)
-- [Usage in Backend List](#php)
+- [Usage in Backend List](#backendList)
 
 <a name="introduction"></a>
 ## Introduction
