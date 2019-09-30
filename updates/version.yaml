@@ -19,3 +19,5 @@
     - Regenerate cached image if original has a different mtime - @kevinkoenen
     - Delete temporary image copy - @multiwebinc
     - Adds zh-cn translations - @everyx
+    - Spaces in filename are now handled properly - @mauserrifle
+    
