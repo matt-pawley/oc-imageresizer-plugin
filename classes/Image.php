@@ -1,5 +1,6 @@
 <?php namespace ToughDeveloper\ImageResizer\Classes;
 
+use InvalidArgumentException;
 use ToughDeveloper\ImageResizer\Models\Settings;
 use October\Rain\Database\Attach\File;
 use Tinify\Tinify;
@@ -120,7 +121,10 @@ class Image
 
     protected function deleteTempFile()
     {
-        unlink(storage_path('app/' . $this->file->getStorageDirectory() . $this->getPartitionDirectory() . $this->file->disk_name));
+        $filePath = storage_path('app/' . $this->file->getStorageDirectory() . $this->getPartitionDirectory() . $this->file->disk_name);
+
+        if(@unlink($filePath) !== false)
+            throw new InvalidArgumentException('File not found');
     }
 
     /**
