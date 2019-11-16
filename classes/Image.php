@@ -8,6 +8,11 @@ use Tinify\Source;
 class Image
 {
     /**
+     * Original path of image
+     */
+    protected $originalFilePath;
+
+    /**
      * File path of image
      */
     protected $filePath;
@@ -34,6 +39,8 @@ class Image
 
     public function __construct($filePath = false)
     {
+        $this->originalFilePath = $filePath;
+
         // Settings are needed often, so offset to variable
         $this->settings = Settings::instance();
 
@@ -75,7 +82,7 @@ class Image
         }
 
         // Set a disk name, this enables caching
-        $this->file->disk_name = $this->diskName();
+        $this->file->disk_name = $this->cacheKey();
 
         // Set the thumbfilename to save passing variables to many functions
         $this->thumbFilename = $this->getThumbFilename($width, $height);
@@ -188,9 +195,9 @@ class Image
      * Creates a unique disk name for an image
      * @return string
      */
-    protected function diskName()
+    protected function cacheKey()
     {
-        $diskName = $this->filePath;
+        $diskName = $this->originalFilePath;
 
         // Ensures a unique filepath when tinypng compression is enabled
         if ($this->isCompressionEnabled()) {
@@ -291,7 +298,7 @@ class Image
     */
     protected function getPartitionDirectory()
     {
-        return implode('/', array_slice(str_split($this->diskName(), 3), 0, 3)) . '/';
+        return implode('/', array_slice(str_split($this->cacheKey(), 3), 0, 3)) . '/';
     }
 
     /**
