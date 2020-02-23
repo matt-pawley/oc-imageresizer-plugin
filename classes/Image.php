@@ -120,7 +120,10 @@ class Image
 
     protected function deleteTempFile()
     {
-        unlink(storage_path('app/' . $this->file->getStorageDirectory() . $this->getPartitionDirectory() . $this->file->disk_name));
+        $path = storage_path('app/' . $this->file->getStorageDirectory() . $this->getPartitionDirectory() . $this->file->disk_name);
+        if (file_exists($path)) {
+            unlink($path);
+        }
     }
 
     /**
