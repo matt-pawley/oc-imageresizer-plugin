@@ -20,4 +20,4 @@
     - Delete temporary image copy - @multiwebinc
     - Adds zh-cn translations - @everyx
     - Spaces in filename are now handled properly - @mauserrifle
-    
+1.4.1: Only attempt to delete temp files if they still exist - @LukeTowers
