@@ -42,8 +42,11 @@ class Image
 
         if ($filePath instanceof File) {
             $this->filePath = $filePath->getLocalPath();
+            $this->file->file_name = $filePath;
             return;
         }
+
+        $this->file->file_name = $filePath;
 
         $this->filePath = (file_exists($filePath))
             ? $filePath
@@ -68,10 +71,15 @@ class Image
         if (!is_file($this->filePath)) {
             return $this->notFoundImage($width, $height);
         }
+    
+        // Not a supported extension? Return the image
+        if (!$this->hasSupportedExtension()) {
+            return $this;
+        }
 
         // If extension is auto, set the actual extension
         if (strtolower($this->options['extension']) == 'auto') {
-           $this->options['extension'] = pathinfo($this->filePath)['extension'];
+           $this->options['extension'] = $this->file->getExtension();
         }
 
         // Set a disk name, this enables caching
@@ -109,6 +117,13 @@ class Image
      */
     public function getCachedImagePath($public = false)
     {
+        // Not a support file extension? Just return the original image
+        if (!$this->hasSupportedExtension()) {
+            return ($public === true)
+                ? url(str_replace(base_path() . '/', '', $this->filePath))
+                : $this->filePath;
+        }
+
         $filePath = $this->file->getStorageDirectory() . $this->getPartitionDirectory() . $this->thumbFilename;
 
         if ($public === true) {
@@ -304,6 +319,15 @@ class Image
         $height = (integer) $height;
 
         return 'thumb__' . $width . '_' . $height . '_' . $this->options['offset'][0] . '_' . $this->options['offset'][1] . '_' . $this->options['mode'] . '.' . $this->options['extension'];
+    }
+
+    /**
+     * Checks if it is a resizable file extension
+     * @return boolean
+     */
+    protected function hasSupportedExtension()
+    {
+        return in_array($this->file->getExtension(), File::$imageExtensions);
     }
 
     /**
