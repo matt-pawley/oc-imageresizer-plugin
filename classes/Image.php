@@ -4,6 +4,9 @@ use ToughDeveloper\ImageResizer\Models\Settings;
 use October\Rain\Database\Attach\File;
 use Tinify\Tinify;
 use Tinify\Source;
+use File as FileHelper;
+use October\Rain\Network\Http;
+use Illuminate\Support\Facades\Storage;
 
 class Image
 {
@@ -51,6 +54,11 @@ class Image
             $this->filePath = $filePath->getLocalPath();
             $this->file->file_name = $filePath;
             return;
+        }
+
+        // If file path is a remote image, download and use as local file
+        if ($this->isRemoteFile($filePath)) {
+            $filePath = $this->getRemoteFile($filePath);
         }
 
         $this->file->file_name = $filePath;
@@ -353,5 +361,55 @@ class Image
     public function __toString()
     {
         return $this->getCachedImagePath(true);
+    }
+
+    /**
+     * Determine if a file path is a remote image
+     *
+     * @param string $filePath
+     * @return boolean
+     */
+    protected function isRemoteFile($filePath)
+    {
+        return filter_var($filePath, FILTER_VALIDATE_URL);
+    }
+
+    /**
+     * Store a remote image locally
+     *
+     * @param string $filePath
+     * @return string
+     */
+    protected function getRemoteFile($filePath)
+    {
+        $tempImage = $this->generateStoragePath($filePath);
+        $tempFullPath = storage_path('app/' . $tempImage);
+
+        Http::get($filePath, function ($http) use ($tempFullPath) {
+            $http->toFile($tempFullPath);
+        });
+
+        return $tempFullPath;
+    }
+
+    /**
+     * Generate storage path to store cached remote images
+     *
+     * @param string $filePath
+     * @return string
+     */
+    protected function generateStoragePath($filePath)
+    {
+        $extension = FileHelper::extension($filePath);
+        $tempPath = $this->file->getStorageDirectory() . $this->getPartitionDirectory();
+        $tempFilename = md5($filePath);
+
+        Storage::makeDirectory($tempPath);
+
+        return vsprintf('%s%s.%s', [
+            $tempPath,
+            $tempFilename,
+            $extension
+        ]);
     }
 }
