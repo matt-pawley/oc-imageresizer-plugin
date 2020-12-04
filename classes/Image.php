@@ -390,9 +390,26 @@ class Image
             return $tempFullPath;
         }
 
+        // If URL doesn't have extension, check if exists a file with one of the allowed extensions
+        $imageExists = $this->checkLocalRemoteImage($tempImage);
+
+        // If found, use already downloaded image
+        if ($imageExists) {
+            return storage_path('app/' . $imageExists);
+        }
+
+        // Download image from remote location
         Http::get($filePath, function ($http) use ($tempFullPath) {
             $http->toFile($tempFullPath);
         });
+
+        // If URL doesn't have extension, discover extension and rename local image
+        if (!FileHelper::extension($tempFullPath)) {
+            $extension = $this->discoverImageExtension($tempFullPath);
+            $newFullPath = sprintf('%s%s', $tempFullPath, $extension);
+            rename($tempFullPath, $newFullPath);
+            $tempFullPath = $newFullPath;
+        }
 
         return $tempFullPath;
     }
@@ -411,10 +428,37 @@ class Image
 
         Storage::makeDirectory($tempPath);
 
-        return vsprintf('%s%s.%s', [
-            $tempPath,
-            $tempFilename,
-            $extension
-        ]);
+        $fileMask = $extension ? '%s%s.%s' : '%s%s';
+
+        return sprintf($fileMask, $tempPath, $tempFilename, $extension);
+    }
+
+    /**
+     * If remote image doesn't expose file extension, discover by looking downloaded file
+     *
+     * @param string $filePath
+     * @return string
+     */
+    protected function discoverImageExtension($filePath)
+    {
+        $imageType = exif_imagetype($filePath);
+        $extension = image_type_to_extension($imageType);
+        return $extension;
+    }
+
+    /**
+     * If URL doesn't have extension, check if exists a file with one of the allowed extensions
+     *
+     * @param $string $filePath
+     * @return Collection
+     */
+    protected function checkLocalRemoteImage($filePath)
+    {
+        $allowedExtensions = File::$imageExtensions;
+
+        return collect($allowedExtensions)->map(function ($imageType) use ($filePath) {
+            $findImage = sprintf('%s.%s', $filePath, $imageType);
+            return Storage::exists($findImage) ? $findImage : false;
+        })->filter()->first();
     }
 }
