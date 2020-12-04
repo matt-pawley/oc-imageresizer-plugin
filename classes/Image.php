@@ -7,6 +7,8 @@ use Tinify\Source;
 
 class Image
 {
+    use RemoteImageTrait;
+
     /**
      * Original path of image
      */
@@ -51,6 +53,11 @@ class Image
             $this->filePath = $filePath->getLocalPath();
             $this->file->file_name = $filePath;
             return;
+        }
+
+        // If file path is a remote image, download and use as local file
+        if ($this->isRemoteFile($filePath)) {
+            $filePath = $this->getRemoteFile($filePath);
         }
 
         $this->file->file_name = $filePath;
