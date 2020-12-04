@@ -361,5 +361,4 @@ class Image
     {
         return $this->getCachedImagePath(true);
     }
-
 }
