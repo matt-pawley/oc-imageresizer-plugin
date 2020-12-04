@@ -385,6 +385,11 @@ class Image
         $tempImage = $this->generateStoragePath($filePath);
         $tempFullPath = storage_path('app/' . $tempImage);
 
+        // Check if remote image was already downloaded
+        if (Storage::exists($tempImage)) {
+            return $tempFullPath;
+        }
+
         Http::get($filePath, function ($http) use ($tempFullPath) {
             $http->toFile($tempFullPath);
         });
