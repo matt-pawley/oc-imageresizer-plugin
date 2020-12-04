@@ -68,7 +68,7 @@ trait RemoteImageTrait
      */
     protected function generateStoragePath($filePath)
     {
-        $extension = FileHelper::extension($filePath);
+        $extension = $this->getRemoteFileExtension($filePath);
         $tempPath = $this->file->getStorageDirectory() . $this->getPartitionDirectory();
         $tempFilename = md5($filePath);
 
@@ -77,6 +77,22 @@ trait RemoteImageTrait
         $fileMask = $extension ? '%s%s.%s' : '%s%s';
 
         return sprintf($fileMask, $tempPath, $tempFilename, $extension);
+    }
+
+    /**
+     * Get file extension from remote image URL
+     *
+     * @param string $filePath
+     * @return string
+     */
+    protected function getRemoteFileExtension($filePath)
+    {
+        // Remove query string from url
+        if (parse_url($filePath, PHP_URL_QUERY)) {
+            $filePath = strtok($filePath, '?');
+        }
+
+        return FileHelper::extension($filePath);
     }
 
     /**
