@@ -168,7 +168,7 @@ class Image
 
         foreach($folders as $folder)
         {
-            if (str_contains($path, $folder))
+            if (str_contains($path, $folder)&&!empty($folder))
             {
                 $paths = explode($folder, $path, 2);
                 return base_path($folder . end($paths));
