@@ -160,15 +160,15 @@ class Image
         // Create array of commonly used folders
         // These will be used to try capture the actual file path to an image without the sub-directory path
         $folders = [
-            config('cms.themesPath'),
-            config('cms.pluginsPath'),
-            config('cms.storage.uploads.path'),
-            config('cms.storage.media.path')
+            config('system.themes_path'),
+            config('system.plugins_path'),
+            config('system.storage.uploads.path'),
+            config('system.storage.media.path')
         ];
 
         foreach($folders as $folder)
         {
-            if (str_contains($path, $folder))
+            if (str_contains($path, $folder)&&!empty($folder))
             {
                 $paths = explode($folder, $path, 2);
                 return base_path($folder . end($paths));
